@@ -25,7 +25,50 @@ const drawScatterPlot = async () => {
       left: 50,
     },
   };
-  const graphDimension = {};
+  const graphDimension = {
+    width:
+      wrapperDimension.width -
+      wrapperDimension.margins.right -
+      wrapperDimension.margins.left,
+    height:
+      wrapperDimension.height -
+      wrapperDimension.margins.top -
+      wrapperDimension.margins.bottom,
+  };
+
+  // draw the canvas
+  const wrapper = d3
+    .select('#wrapper')
+    .append('svg')
+    .attr('width', wrapperDimension.width)
+    .attr('height', wrapperDimension.height);
+
+  const graph = wrapper
+    .append('g')
+    .attr('width', graphDimension.width)
+    .attr('height', graphDimension.height)
+    .style(
+      'transform',
+      `translate(${wrapperDimension.margins.left}px, ${wrapperDimension.margins.top}px)`
+    );
+
+  // create the scale
+  const dewPointDomain = d3.extent(weatherObjsList, xAccessor);
+  const xScale = d3
+    .scaleLinear()
+    .domain(dewPointDomain)
+    .range([0, graphDimension.width])
+    .nice();
+
+  const humidityDomain = d3.extent(weatherObjsList, yAccessor);
+  const yScale = d3
+    .scaleLinear()
+    .domain(humidityDomain)
+    .range([graphDimension.height, 0])
+    .nice();
+
+  // draw data element
+  // draw peripherials (axes, legends)
 };
 
 drawScatterPlot();

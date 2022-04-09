@@ -68,6 +68,15 @@ const drawScatterPlot = async () => {
     .nice();
 
   // draw data element
+  const dataDots = graph.selectAll('circle').data(weatherObjsList);
+
+  dataDots
+    .join('circle')
+    .attr('cx', (dataObj) => xScale(xAccessor(dataObj)))
+    .attr('cy', (dataObj) => yScale(yAccessor(dataObj)))
+    .attr('r', 4)
+    .attr('fill', 'cornflowerblue');
+
   // draw peripherials (axes, legends)
 };
 

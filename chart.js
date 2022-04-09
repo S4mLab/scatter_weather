@@ -78,6 +78,36 @@ const drawScatterPlot = async () => {
     .attr('fill', 'cornflowerblue');
 
   // draw peripherials (axes, legends)
+  const xAxisGenerator = d3.axisBottom().scale(xScale);
+
+  const xAxis = graph
+    .append('g')
+    .call(xAxisGenerator)
+    .style('transform', `translateY(${graphDimension.height}px)`);
+
+  // adding x axis label
+  const xAxisLabel = xAxis
+    .append('text')
+    .attr('x', graphDimension.width / 2)
+    .attr('y', wrapperDimension.margins.bottom - 10)
+    .attr('fill', 'black')
+    .style('font-size', '1.4em')
+    .html('Dew point (°F)');
+
+  const yAxisGenerator = d3.axisLeft().scale(yScale).ticks(5);
+
+  const yAxis = graph.append('g').call(yAxisGenerator);
+
+  // adding y axis label
+  const yAxisLabel = yAxis
+    .append('text')
+    .attr('x', -graphDimension.height / 2)
+    .attr('y', -wrapperDimension.margins.left + 10)
+    .attr('fill', 'black')
+    .style('font-size', '1.4em')
+    .text('Relative humidity')
+    .style('transform', 'rotate(-90deg)')
+    .style('text-anchor', 'middle');
 };
 
 drawScatterPlot();

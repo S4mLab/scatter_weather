@@ -5,10 +5,12 @@ const weatherUrl =
 
 const drawScatterPlot = async () => {
   const weatherObjsList = await d3.json(weatherUrl);
+  console.table(weatherObjsList[0]);
 
   // access the data
   const xAccessor = (dataObj) => dataObj.dewPoint;
   const yAccessor = (dataObj) => dataObj.humidity;
+  const colorAccessor = (dataObj) => dataObj.cloudCover;
 
   // initialise canvas dimension
   const minWrapperDimension = d3.min([
@@ -67,6 +69,12 @@ const drawScatterPlot = async () => {
     .range([graphDimension.height, 0])
     .nice();
 
+  // color scale for cloud cover var
+  const cloudCoverDomain = d3.extent(weatherObjsList, colorAccessor);
+  const colorScale = d3
+    .scaleLinear()
+    .domain(cloudCoverDomain)
+    .range(['skyblue', 'darkslategrey']);
   // draw data element
   const dataDots = graph.selectAll('circle').data(weatherObjsList);
 
@@ -75,7 +83,7 @@ const drawScatterPlot = async () => {
     .attr('cx', (dataObj) => xScale(xAccessor(dataObj)))
     .attr('cy', (dataObj) => yScale(yAccessor(dataObj)))
     .attr('r', 4)
-    .attr('fill', 'cornflowerblue');
+    .attr('fill', (dataObj) => colorScale(colorAccessor(dataObj)));
 
   // draw peripherials (axes, legends)
   const xAxisGenerator = d3.axisBottom().scale(xScale);
